@@ -1,0 +1,15 @@
+// Entity Brand
+
+Brand {
+  @PrimaryKey
+  id: Int;
+  name: String;
+  status: Boolean;
+  text: String;
+  siteTitle: String;
+  displayedInHomeMenu: String;
+  updateDate: String;
+  skuKitFilho: String;
+  createdAt: String;
+  lastUpdatedAt: String;
+}

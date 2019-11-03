@@ -1,0 +1,33 @@
+
+//teste aaa
+@Comment(text:"Esse eh um produto")
+Product {
+	@PrimaryKey
+	@Comment(text:"aeee", scope:"aaaa")
+	id: Int;
+	
+	@ForeignKey(name: "brand", entity: "Brand")
+  brandId: Int;
+
+  @ForeignKey(name: "category", entity: "Category")
+  categoryId: Int;
+
+	name: String;
+	status: Boolean;
+  description: String;
+  siteTitle: String;
+  referenceCode: String;
+  warrantyPeriod: Int;
+  linkText: String;
+  keyWords: String;
+  metaTagDescription: String;
+  showFlag: Boolean;
+  editionDate: String;
+  nameComplement: String;
+  fiscalCode: String;
+  version: Int;
+  createdAt: String;
+  lastUpdatedByUser: String;
+  lastUpdatedByIp: String;
+  lastUpdatedAt: String;
+} 

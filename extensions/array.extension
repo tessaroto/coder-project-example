@@ -1,0 +1,36 @@
+module.exports = {
+	type: "backgound",
+	name: "array",
+	onCreateContext: (context, element, params)=>{
+
+		Array.prototype.joinAttribute = function (name, separator) {
+
+			if (this && this.length>0){
+				if (!separator) separator = ", ";
+
+				var values = "";
+				for(var index in this){
+
+					const item = this[index];
+					if ((typeof item) != "function") {
+						let result = "";
+						if (name.indexOf("{}.") != -1)
+							result = eval(name.replaceAll("{}.", "item."))
+						else
+							result = eval("item." + name)
+
+						if (result && result.length > 0){
+							values += result + separator;
+						}
+
+					}
+				}
+				return values.substring(0, values.length - separator.length);
+			}
+			else
+				return "";
+
+		};
+
+	}
+}

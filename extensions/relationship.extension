@@ -1,0 +1,42 @@
+
+const findForeignKey = function (){
+	var entity = this.entity;
+	var context = this.context;
+	
+	let foreignKeys = [];
+
+	Object.values(entity.attributes).forEach((attribute)=>{
+		
+		if (attribute.fk){
+			let entityRef = context.entities[attribute.fk.entity];
+			
+			let fk = {
+				name: attribute.fk.name,
+				entity: entity,
+				attribute: attribute,
+				entityRef: entityRef,
+				attributeRef: entityRef.primaryKeys()[0]
+			};
+			foreignKeys.push(fk);
+		}
+	});
+	return foreignKeys;
+}
+
+
+module.exports = {
+	type: "backgound",
+	name: "rel",
+	params:{
+		text:{
+			required: true	
+		}
+	},
+	onCreateContext: (context)=>{
+		Object.values(context.entities).forEach((entity)=>{
+			entity.foreignKeys = findForeignKey.bind({entity, context});
+		});
+
+
+	}
+}

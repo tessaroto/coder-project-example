@@ -1,0 +1,81 @@
+######################### Template backend.js #########################
+## {Description}
+## Use #saveTo("{path}") to generate file.
+#saveTo("graphql/${entity.name.toKebabCase()}/schema.graphql")
+#######################################################################
+
+
+
+type ${entity.name} {
+#foreach($attribute in $entity.attributes)
+#if($attribute.isKeyElement() )
+  $attribute.name: ID
+#else
+#if ($attribute.type == "Integer")
+  $attribute.name: Int
+#{elseif}($attribute.type == "BigDecimal")
+	$attribute.name: Float
+#{else}
+  $attribute.name: $attribute.type
+#end
+#end
+#end
+#foreach($fk in $entity.foreignKeys())
+  ${fk.name.toCamelCase()}: ${fk.entityRef.name.toPascalCase()}
+#end
+}
+
+input ${entity.name}Input {
+#foreach($attribute in $entity.attributes)
+#if(!$attribute.isKeyElement() )
+#if ($attribute.type == "Integer")
+  $attribute.name: Int
+#{elseif}($attribute.type == "BigDecimal")
+	$attribute.name: Float
+#{else}
+  $attribute.name: $attribute.type
+#end
+#end
+#end
+}
+
+type Query {
+
+#if($entity.hasPrimaryKey())
+#[[  # ### GET]]# ${entity.name.toCamelCase()}
+#[[  # Get a specific]]# ${entity.name.toCamelCase()}
+#[[  # _Arguments_]]# 
+#[[  # - **id**:]]# ${entity.name} id
+  get${entity.primaryKeys().joinAttribute("name.toPascalCase()", "And")}(id: ID!): ${entity.name} @auth(role: "${entity.name.toCamelCase()}-read")
+#end
+#if($entity.isSearchable)
+
+#[[  # ### GET]]# ${entity.name.toPlural().toCamelCase()}
+#[[  # List all]]# ${entity.name.toPlural().toCamelCase()}
+  getAll${entity.name.toPlural().toPascalCase()}(${entity.searchable.parameters.joinAttribute("{}.name.toCamelCase() + ' ' + {}.type.toPascalCase()")}): [${entity.name}] @auth(role: "${entity.name.toCamelCase()}-read")
+#end
+
+}
+#if($entity.isCreatable || $entity.isUpdatable)
+
+type Mutation {
+#if($entity.isCreatable)
+
+#[[  # ### Create]]# ${entity.name.toCamelCase()}
+#[[  # Create a new]]# ${entity.name.toCamelCase()}
+#[[  # _Arguments_]]#
+#[[  # - **input**:]]# ${entity.name}Input 
+  create${entity.name}(input: ${entity.name}Input!): ${entity.name} @auth(role: "${entity.name.toCamelCase()}-write")
+#end
+#if($entity.isUpdatable)
+
+#[[  # ### Update]]# ${entity.name.toCamelCase()}
+#[[  # Update a]]# ${entity.name.toCamelCase()}
+#[[  # _Arguments_]]#
+#[[  # - **id**:]]# ${entity.name} id
+#[[  # - **input**:]]# ${entity.name}Input 
+  update${entity.name}(id: ID!, input: ${entity.name}Input!): ${entity.name} @auth(role: "${entity.name.toCamelCase()}-write")
+#end
+
+}
+#end

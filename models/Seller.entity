@@ -1,0 +1,20 @@
+
+Seller {
+	@PrimaryKey
+	id: Int;
+
+	createdAt: String;
+	updatedAt: String;
+	trackingId: String;
+	companyName: String;
+	tradingName: String;
+	description: String;
+	active: Boolean;
+	emailPrivacyEnabled: Boolean;
+	status: String;
+	vendor: Int;
+	integrated: Boolean;
+} 
+
+
+

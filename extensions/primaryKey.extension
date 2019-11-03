@@ -1,0 +1,34 @@
+
+const findPrimaryKeys = function(){
+	const entity = this;
+	let primaryKeys = [];
+	Object.values(entity.attributes).forEach((attribute)=>{
+		if (attribute.isPk){
+			primaryKeys.push(attribute);
+		}
+	});
+
+	return primaryKeys;
+}
+
+const hasPrimaryKey = function(){
+	return this.primaryKeys().length > 0;
+}
+
+module.exports = {
+	type: "annotation",
+	scope: ["attribute"],
+	name: "PrimaryKey",
+	params:{
+	},
+	onCreateContext: (context, element, params)=>{
+	
+		Object.values(context.entities).forEach((entity)=>{
+			entity.primaryKeys = findPrimaryKeys.bind(entity);
+			entity.hasPrimaryKey = hasPrimaryKey.bind(entity);
+		});
+
+		element.isPk = true;
+
+	}
+}

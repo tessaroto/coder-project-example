@@ -1,0 +1,55 @@
+######################### Template backend.js #########################
+## {Description}
+## Use #saveTo("{path}") to generate file.
+#saveTo("graphql/${entity.name.toKebabCase()}/resolver.js")
+#######################################################################
+
+const { $entity.name#foreach($fk in $entity.foreignKeys())#if($entity.name != $fk.entityRef.name), ${fk.entityRef.name.toPascalCase()}#end#end } = require("../../backends/catalog")
+
+exports.resolver = {
+    Query: {
+#if($entity.isSearchable)
+        async getAll${entity.name.toPlural().toPascalCase()}(parent, params, context, info) {
+          return await ${entity.name}.getInstance().findAll(params);
+        },
+
+#end
+#if($entity.hasPrimaryKey())
+        async get${entity.primaryKeys().joinAttribute("{}.name.toPascalCase()", "And")}(parent, { ${entity.primaryKeys().joinAttribute("{}.name.toCamelCase()")} }, context, info) {
+          return await ${entity.name}.getInstance().findBy${entity.primaryKeys().joinAttribute("{}.name.toPascalCase()", "And")}(${entity.primaryKeys().joinAttribute("{}.name.toCamelCase()")});
+        },
+
+#end
+#foreach($index in $entity.indexes())
+        async get${entity.name.toPascalCase()}By${index.name.toPascalCase()}(parent, { ${index.attributes.joinAttribute("name")} }, context, info) {
+          return await ${entity.name}.getInstance().findBy${index.name.toPascalCase()}(${index.attributes.joinAttribute("name")});
+        },
+
+#end
+    },
+
+#if($entity.isCreatable || $entity.isUpdatable)
+    Mutation: {
+#if($entity.isCreatable)
+        async create${entity.name}(parent, { input }, context, info) {
+          return await ${entity.name}.getInstance().create(input);
+        },
+#end
+#if($entity.isUpdatable)
+
+        async update${entity.name}(parent, { $entity.primaryKeys().joinAttribute("name"), input }, context, info) {
+          return await ${entity.name}.getInstance().update($entity.primaryKeys().joinAttribute("name"), input);
+        }, 
+    },
+#end
+#end
+    ${entity.name.toPascalCase()}: {
+#foreach($fk in $entity.foreignKeys())
+        async ${fk.name.toCamelCase()}(${fk.entity.name.toCamelCase()}) {
+          if (!${fk.entity.name.toCamelCase()}.${fk.attribute.name}) return null;
+          return await ${fk.entityRef.name.toPascalCase()}.getInstance().findById(${fk.entity.name.toCamelCase()}.${fk.attribute.name});
+        },
+
+#end
+    }
+}

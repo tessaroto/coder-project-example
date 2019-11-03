@@ -1,0 +1,33 @@
+
+
+@Searchable(parameters:{page: "Int", pageSize: "Int", sort: "String", name: "String"})
+@Creatable
+@Updatable
+Sku {
+
+	@PrimaryKey
+	id: Int;
+	@PrimaryKey
+	name: String;
+
+	@ForeignKey(name: "product", entity: "Product")
+	productId: Int;
+
+	@Index(name: "test2")
+	@Index(name: "test")
+	status: Boolean;
+
+	@Index(name: "test")
+  description: String;
+
+  createdAt: String;
+  mainImageUrl: String;
+  discontinued: Boolean;
+  modelCode: String;
+  freightTypeId: Int;
+  storeExternalSkuId: String;
+  version: Int;
+  lastUpdatedByUser: String;
+  lastUpdatedByIp: String;
+  lastUpdatedAt: String;
+} 

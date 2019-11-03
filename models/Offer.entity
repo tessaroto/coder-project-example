@@ -1,0 +1,24 @@
+// Entity Offer
+
+Offer {
+  @PrimaryKey
+  id: Int;
+  @ForeignKey(name: "sku", entity: "Sku")
+	skuId: Int;
+	@ForeignKey(name: "seller", entity: "Seller")
+	sellerId: String;
+	status: Boolean;
+	sellerExternalOfferId: String;
+	price: Float;
+	listPrice: Float;
+	quantity: Int;
+	offerStatusSeller: Boolean;
+	storeId: Int;
+	importTax: Float;
+	requestedUpdateDate: String;
+	version: Int;
+	createdAt: String;
+	lastUpdatedByUser: String;
+	lastUpdatedByIp: String;
+	lastUpdatedAt: String;
+}

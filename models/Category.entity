@@ -1,0 +1,25 @@
+
+
+Category {
+	@PrimaryKey
+	id: Int;
+	name: String;
+
+	@ForeignKey(name: "department", entity: "Category")
+	idDepartment: Int;
+
+	@ForeignKey(name: "parent", entity: "Category")
+	parentId: Int;
+
+	status: Boolean;
+  flagCategoryMirror: Boolean;
+  flagMenu: Boolean;
+  keywords: String; 
+  siteTitle: String; 
+  flagActiveMenuLink: Boolean;
+  order: Int; 
+  createdAt: String; 
+  lastUpdatedAt: String; 
+
+} 
+

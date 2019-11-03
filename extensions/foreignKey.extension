@@ -1,0 +1,20 @@
+module.exports = {
+	type: "annotation",
+	scope: ["attribute"],
+	name: "ForeignKey",
+	params:{
+		name:{
+			required: true	
+		},
+		entity:{
+			required: true	
+		}
+	},
+	onCreateContext: (context, element, params)=>{
+		element.fk = {
+			name: params.name,
+			entity: params.entity
+		}
+		element.isFk = true;
+	}
+}

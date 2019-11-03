@@ -1,0 +1,10 @@
+module.exports = {
+	type: "annotation",
+	scope: ["entity"],
+	name: "Creatable",
+	params:{
+	},
+	onCreateContext: (context, element, params)=>{
+		element.isCreatable = true;
+	}
+}

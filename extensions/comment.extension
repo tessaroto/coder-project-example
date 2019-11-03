@@ -1,0 +1,13 @@
+module.exports = {
+	type: "annotation",
+	scope: ["entity", "attribute"],
+	name: "Comment",
+	params:{
+		text:{
+			required: true	
+		}
+	},
+	onCreateContext: (context, element, params)=>{
+		element.comment = params.text;
+	}
+}

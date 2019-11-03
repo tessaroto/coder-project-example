@@ -1,0 +1,9 @@
+
+//teste aaa
+@Comment(text:"Esse eh um produto")
+ProductSkuFile {
+	@PrimaryKey
+	@Comment(text:"aeee", scope:"aaaa")
+	id: Int;
+	   name: String;
+} 

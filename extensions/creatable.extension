@@ -1,0 +1,10 @@
+module.exports = {
+	type: "annotation",
+	scope: ["entity"],
+	name: "Updatable",
+	params:{
+	},
+	onCreateContext: (context, element, params)=>{
+		element.isUpdatable = true;
+	}
+}

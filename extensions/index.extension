@@ -1,0 +1,45 @@
+
+const findIndex = function (){
+	var entity = this.entity;
+	var context = this.context;
+	
+	let indexes = [];
+//	console.log(typeof indexes)
+
+	Object.values(entity.indexesObj).forEach((index)=>{
+		indexes.push(index);
+	});
+	return indexes;
+}
+
+
+module.exports = {
+	type: "annotation",
+	scope: ["attribute"],
+	name: "Index",
+	params:{
+	},
+	onCreateContext: (context, element, params)=>{
+	
+		const entity = context.entity;
+		entity.indexesObj = entity.indexesObj || {};
+
+		const name = params.name || element.name;
+
+		if (entity.indexesObj[name]){
+			entity.indexesObj[name].attributes.push(element);
+		}
+		else{
+			const index = {
+				name: name,
+				attributes: [element]
+			};
+			entity.indexesObj[name] = index;
+		}
+
+		if (!entity.indexes){
+			entity.indexes = findIndex.bind({entity, context});
+		}
+		
+	}
+}

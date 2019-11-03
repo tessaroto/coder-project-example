@@ -1,0 +1,68 @@
+######################### Template backend.js #########################
+## {Description}
+## Use #saveTo("{path}") to generate file.
+#saveTo("backends/${entity.name.toCamelCase()}.js")
+#######################################################################
+const Http = require("./http-client")
+
+class ${entity.name.toPascalCase()} {
+
+  static getInstance() {
+    if (!this.instance) 
+      this.instance = new ${entity.name}();
+    return this.instance;
+  }
+
+  async findBy${entity.primaryKeys().joinAttribute("name.toPascalCase()", "And")}(${entity.primaryKeys().joinAttribute("name.toCamelCase()")}) {
+    let response = await Http.get('/ws/${entity.name.toPlural().toLowerCase()}/' + id);
+    return response.data;
+  }
+
+#if($entity.isSearchable)
+  async findAll({ page, pageSize, sort, name }) {
+
+    let params = {
+      params: {
+        page: page,
+        page_size: pageSize,
+        order: sort,
+        name: name
+      }
+    }
+
+    let response = await Http.get('/ws/${entity.name.toPlural().toLowerCase()}', params);
+#if($entity.name == "Offer")
+    return response.data.${entity.name.toCamelCase()};
+#{else}
+    return response.data.${entity.name.toPlural().toCamelCase()};
+#end
+  }
+#end ##endif
+#if($entity.isCreatable)
+
+  async create(${entity.name.toCamelCase()}) {
+    let response = await Http.post('/ws/${entity.name.toPlural().toLowerCase()}/', ${entity.name.toCamelCase()});
+    return response.data;
+  }
+#end
+#if($entity.isUpdatable)
+
+  async update($entity.primaryKeys().joinAttribute("name"), ${entity.name.toCamelCase()}) {
+#foreach($pk in $entity.primaryKeys())
+    Object.assign(${entity.name.toCamelCase()}, {$pk.name: $pk.name});
+#end
+    let response = await Http.put('/ws/${entity.name.toPlural().toLowerCase()}/' + id, ${entity.name.toCamelCase()});
+    return response.data;
+  }
+#end
+
+#foreach($index in $entity.indexes())
+  async findBy${index.name.toPascalCase()}(${index.attributes.joinAttribute("name")}) {
+    let response = await Http.get('/ws/${entity.name.toPlural().toLowerCase()}/' + id);
+    return response.data;
+  }
+       
+#end
+}
+
+module.exports = ${entity.name};
